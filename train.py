@@ -68,5 +68,8 @@ model = CNNClassifier() if args.model == "cnn" else LinearClassifier()
 
 dataset = CIFAR10() if args.model == "cifar" else MNIST()
 
+trainloader, testloader = dataset.get_loaders()
+
 criterion = nn.CrossEntropyLoss()       #Loss function to calculate the difference between input and target
 optimizer = optim.Adam(model.parameters(), lr = 0.001)      #Adam optimizer 
+
