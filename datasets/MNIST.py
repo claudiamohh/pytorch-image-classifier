@@ -1,6 +1,9 @@
-    ''' MNIST Dataset '''
+''' MNIST Dataset '''
 
-from torchvision imports datasets
+import torch
+import torchvision
+import torchvision.transforms as transforms
+from torchvision import datasets
 from torchvision.transforms import ToTensor
 
 class MNISTDataset():
@@ -24,5 +27,5 @@ class MNISTDataset():
         self.testloader = torch.utils.data.DataLoader(
                 self.testset, batch_size = 100, shuffle = True, num_workers = 1)
 
-    def get_loaders():
+    def get_loaders(self):
         return (self.trainloader, self.testloader)
