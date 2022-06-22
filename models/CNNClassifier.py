@@ -1,5 +1,12 @@
-    ''' Large CNN Model '''
-class CNNClassifier():
+''' Large CNN Model with 6 convolution layers, pooling layers and 3 fully connected layers.
+    First convolution layer takes in a channel of dimension 3 since the images are RGB, kernel size is 3*3. The output of this convolution layer is set to 32 channels which means it will extract 32 feature maps using 32 kernels. Padding size is set to 1 so that input and output dimensions are the same. Then it goes through ReLu activation followed by a max-pooling layer with kernel size of 2 and stride 2.'''
+
+import torch
+import torchvision
+import torch.nn as nn
+import torch.nn.functional as F
+
+class CNNClassifier(nn.Module):
     def __init__(self):
         super().__init__()
         self.conv1 = nn.Conv2d(3, 32, kernel_size = 3, padding = 1)
@@ -24,4 +31,4 @@ class CNNClassifier():
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
-        return x 
+        return x
