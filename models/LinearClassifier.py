@@ -4,7 +4,7 @@ import torchvision
 import torch.nn as nn
 import torch.nn.functional as F
 
-class LinearCNN(nn.Module):
+class Linear(nn.Module):
     def __init__(self):
         super().__init__()
         self.fc1 = nn.Linear(3*32*32, 120)      #input has to be image size to fit 
