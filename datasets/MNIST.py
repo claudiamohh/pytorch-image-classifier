@@ -20,20 +20,21 @@ class MNISTDataset():
                 root = 'data', train = True, transform = self.transform, download = True)
 
         self.trainloader = torch.utils.data.DataLoader(
-                self.trainset, batch_size = 100, shuffle = True, num_workers = 1)
+                self.trainset, batch_size = self.batch_size, shuffle = True, num_workers = 1)
 
         
         self.testset = datasets.MNIST(
                 root = 'data', train = False, transform = self.transform)
 
         self.testloader = torch.utils.data.DataLoader(
-                self.testset, batch_size = 100, shuffle = True, num_workers = 1)
+                self.testset, batch_size = self.batch_size, shuffle = True, num_workers = 1)
 
-#image size = (1 * 28 * 28)
     def channels(self):
+        # image size = (1 * 28 * 28)
         return 1
 
     def size(self):
+        # image size = (1 * 28 * 28)
         return 28
 
     def get_loaders(self):
