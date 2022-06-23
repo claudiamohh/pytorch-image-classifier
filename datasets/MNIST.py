@@ -7,12 +7,14 @@ from torchvision import datasets
 from torchvision.transforms import ToTensor
 
 class MNISTDataset():
-    def __init__(self):
+    def __init__(self, batch_size = 256):
         super().__init__()
+
+        self.batch_size = batch_size
 
         self.transform = transforms.Compose(
                 [transforms.ToTensor(),
-                  transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+                  transforms.Normalize((0.5), (0.5))])
 
         self.trainset = datasets.MNIST(
                 root = 'data', train = True, transform = self.transform, download = True)
@@ -26,6 +28,13 @@ class MNISTDataset():
 
         self.testloader = torch.utils.data.DataLoader(
                 self.testset, batch_size = 100, shuffle = True, num_workers = 1)
+
+#image size = (1 * 28 * 28)
+    def channels(self):
+        return 1
+
+    def size(self):
+        return 28
 
     def get_loaders(self):
         return (self.trainloader, self.testloader)
