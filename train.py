@@ -1,4 +1,4 @@
-"""Convolutional Neural Network"""
+"""Training script to train linear/CNN model for CIFAR10/MNIST dataset"""
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -10,10 +10,10 @@ import torchvision.transforms as transforms
 import os
 import argparse
 from tqdm import tqdm
-from models.LinearClassifier import Linear
-from models.CNNClassifier import CNN
-from datasets.CIFAR10 import CIFAR10Dataset
-from datasets.MNIST import MNISTDataset
+from models.linear import Linear
+from models.cnn import CNN
+from datasets.cifar import CIFAR10Dataset
+from datasets.mnist import MNISTDataset
 
 
 def train(model, optimizer, criterion, trainloader, epochs):
