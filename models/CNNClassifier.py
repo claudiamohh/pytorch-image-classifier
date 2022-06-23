@@ -26,6 +26,9 @@ class CNN(nn.Module):
         if self.use_mnist:
             self.fc0 = nn.Linear(2304, 256 * 4 * 4)
 
+        if self.use_mnist:
+            self.fc0 = nn.Linear(2304, 256 * 4 * 4)
+
     def forward(self,x):
         x = F.relu(self.conv1(x))
         x = self.pool(F.relu(self.conv2(x)))
