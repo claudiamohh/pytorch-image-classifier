@@ -58,6 +58,15 @@ def evaluate_overall(model, testloader):
     print(f'Accuracy of the network on the test images: {100 * correct // total} %')
 
 def main(args, device):
+    
+    print("\n")
+    print("Arguments".center(50,"-"))
+    for key, value in vars(args).items():
+        print(f"  {key}: {value}")
+    
+    print(f"  device: {device}")
+    print("Arguments".center(50,"-"))
+    print("\n")
 
     dataset = MNISTDataset() if args.dataset == "mnist" else CIFAR10Dataset()
     channels = dataset.channels()
@@ -73,8 +82,15 @@ def main(args, device):
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
+    print("\n")
+    print("Training Start".center(50,"-"))
     model = train(model, optimizer, criterion, train_loader, args.epoch)
+    print("Training End".center(50,"-"))
+    print("\n")
+
+    print("Testing Start".center(50,"-"))
     evaluate_overall(model, test_loader)
+    print("Testing Start".center(50,"-"))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Convolutional Neural Network Training')
