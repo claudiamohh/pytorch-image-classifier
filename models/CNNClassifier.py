@@ -1,5 +1,5 @@
 ''' Large CNN Model with 6 convolution layers, pooling layers and 3 fully connected layers.
-    First convolution layer takes in a channel of dimension 3 since the images are RGB, kernel size is 3*3. The output of this convolution layer is set to 32 channels which means it will extract 32 feature maps using 32 kernels. Padding size is set to 1 so that input and output dimensions are the same. Then it goes through ReLu activation followed by a max-pooling layer with kernel size of 2 and stride 2.'''
+First convolution layer takes in a channel of dimension 3 since the images are RGB, kernel size is 3*3. The output of this convolution layer is set to 32 channels which means it will extract 32 feature maps using 32 kernels. Padding size is set to 1 so that input and output dimensions are the same. Then it goes through ReLu activation followed by a max-pooling layer with kernel size of 2 and stride 2.'''
 
 import torch
 import torchvision
