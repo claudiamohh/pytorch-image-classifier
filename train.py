@@ -33,9 +33,6 @@ def train(model, optimizer, criterion, trainloader, epochs):
             loss.backward()
             optimizer.step()
 
-            if batch_idx >= 2:
-                break
-
             running_loss += loss.item()  # loss item of each batch
         print(f"Loss of Epoch: {epoch} is {running_loss/len(trainloader)}")
 
