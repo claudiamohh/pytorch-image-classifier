@@ -98,7 +98,7 @@ def main(args, device):
 
     print("Testing Start".center(50, "-"))
     evaluate_overall(model, test_loader)
-    print("Testing Start".center(50, "-"))
+    print("Testing End".center(50, "-"))
 
 
 if __name__ == "__main__":
