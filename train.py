@@ -1,43 +1,43 @@
+'''Convolutional Neural Network'''
 import torch
-import torchvision 
-import torchvision.transforms as transforms 
 import torch.nn as nn
 import torch.nn.functional as F 
-import torach.optim as optim
+import torch.optim as optim
+
+import torchvision 
+import torchvision.transforms as transforms 
+
 import os
 import argparse
-from models.cnn import CNNClassifier
-from models.cnn import LinearClassifier
 
-device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-print(device)
+from models.LinearClassifier import Linear
+from models.CNNClassifier import CNN
+from datasets.CIFAR10 import CIFAR10Dataset
+from datasets.MNIST import MNISTDataset
 
-parser = argparse.ArgumentParser(description = 'Pytorch Image Training')
-parser.add_argument('--lr', default=0.001, type = float, help = 'learning rate')
-parser.add_argument('--resume', '-r', action = 'store_true', help = 'resume from checkpoint')
+parser = argparse.ArgumentParser(description='Convolutional Neural Network Training')
+parser.add_argument('--lr', default=0.001, type=float, help='Learning rate')
+parser.add_argument('--epoch', default=10, type=int, help='Number of epoch')
+parser.add_argument('--model')
+parser.add_argument('--dataset')
 args = parser.parse_args()
 
-if args.resume:
-    print('==> Resuming from checkpoint..')
-    assert os.path.isdir('checkpoint'), 'Error: no checkpoint directory found!'
-    checkpoint = torch.load('./checkpoint/ckpt.pth')
-    net.load_state_dict(checkpoint['net'])
-    best_acc = checkpoint['acc']
-    start_epoch = checkpoint['epoch']
+#Checking if GPU is available
+device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
+
 
 def train (model, optimizer, criterion, trainloader, epochs):
     '''Training the model using the variables: model, optimizer, criterion, trainloader, number of epochs'''
     for epoch in range(epochs):
         running_loss = 0.0
         for batch_idx, data in enumerate(trainloader, 0):
-            inputs, labels = data[0].to(device), datat[1].to(device)
+            inputs, labels = data[0].to(device), data[1].to(device)
 
             optimizer.zero_grad() #zero the gradients of the model parameters 
 
             #forward + backward + optimize 
             outputs = model(inputs)
             loss = criterion(outputs, labels)
-
             #performing the backpropogation step and updating the weights of the model parameters
             loss.backward()
             optimizer.step()
@@ -64,12 +64,18 @@ def evaluate_overall(model, testloader):
 
     print(f'Accuracy of the network on the test images: {100 * correct // total} %')
 
-model = CNNClassifier() if args.model == "cnn" else LinearClassifier()
+def main():
+    dataset = MNISTDataset() if args.dataset == "mnist" else CIFAR10Dataset()
+    channels = dataset.channels()
+    size = dataset.size()
+    train_loader, test_loader = dataset.get_loaders()
+    criterion = nn.CrossEntropyLoss()       #Loss function to calculate the difference between input and target
+    model = CNN(channels, size) if args.model == "cnn" else Linear(channels, size)
+    model = model.to(device)
+    optimizer = optim.Adam(model.parameters(), lr=args.lr)      #Adam optimizer 
 
-dataset = CIFAR10() if args.model == "cifar" else MNIST()
+    model = train(model, optimizer, criterion, train_loader, args.epoch)
+    evaluate_overall(model, test_loader)
 
-trainloader, testloader = dataset.get_loaders()
-
-criterion = nn.CrossEntropyLoss()       #Loss function to calculate the difference between input and target
-optimizer = optim.Adam(model.parameters(), lr = 0.001)      #Adam optimizer 
-
+if __name__ == '__main__':
+    main()
