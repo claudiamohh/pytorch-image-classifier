@@ -5,7 +5,6 @@ import torch
 import torchvision
 import torch.nn as nn
 import torch.nn.functional as F
-from datasets.MNIST import MNISTDataset
 
 
 class CNN(nn.Module):
