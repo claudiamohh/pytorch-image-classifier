@@ -24,6 +24,7 @@ args = parser.parse_args()
 
 #Checking if GPU is available
 device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
+print(device)
 
 
 def train (model, optimizer, criterion, trainloader, epochs):
@@ -31,6 +32,7 @@ def train (model, optimizer, criterion, trainloader, epochs):
     for epoch in range(epochs):
         running_loss = 0.0
         for batch_idx, data in enumerate(trainloader, 0):
+
             inputs, labels = data[0].to(device), data[1].to(device)
 
             optimizer.zero_grad() #zero the gradients of the model parameters 
@@ -41,6 +43,9 @@ def train (model, optimizer, criterion, trainloader, epochs):
             #performing the backpropogation step and updating the weights of the model parameters
             loss.backward()
             optimizer.step()
+
+            if batch_idx >= 2:
+                break
 
             running_loss += loss.item() #loss item of each batch 
         print(f'Loss of Epoch: {epoch} is {running_loss/len(trainloader)}')
@@ -70,7 +75,7 @@ def main():
     size = dataset.size()
     train_loader, test_loader = dataset.get_loaders()
     criterion = nn.CrossEntropyLoss()       #Loss function to calculate the difference between input and target
-    model = CNN(channels, size) if args.model == "cnn" else Linear(channels, size)
+    model = CNN(channels, use_mnist=(args.dataset == "mnist")) if args.model == "cnn" else Linear(channels, size)
     model = model.to(device)
     optimizer = optim.Adam(model.parameters(), lr=args.lr)      #Adam optimizer 
 

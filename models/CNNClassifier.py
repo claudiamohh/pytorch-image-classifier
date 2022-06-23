@@ -7,7 +7,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 from datasets.MNIST import MNISTDataset
 
-use_mnist = MNISTDataset()
 
 class CNN(nn.Module):
     def __init__(self, channels, use_mnist=False):
@@ -26,8 +25,9 @@ class CNN(nn.Module):
         if self.use_mnist:
             self.fc0 = nn.Linear(2304, 256 * 4 * 4)
 
-        if self.use_mnist:
-            self.fc0 = nn.Linear(2304, 256 * 4 * 4)
+        self.fc1 = nn.Linear(256 * 4 * 4, 1024)
+        self.fc2 = nn.Linear(1024, 512)
+        self.fc3 = nn.Linear(512, 10)
 
     def forward(self,x):
         x = F.relu(self.conv1(x))
