@@ -25,5 +25,12 @@ class CIFAR10Dataset():
         self.testloader = torch.utils.data.DataLoader(
                 self.testset, batch_size=self.batch_size, shuffle=False, num_workers=2)
 
+#image size = (3 * 32 * 32)
+    def channels(self):
+        return 3
+    
+    def size(self):
+        return 32
+
     def get_loaders(self):
         return (self.trainloader, self.testloader)
