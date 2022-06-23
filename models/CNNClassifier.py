@@ -7,9 +7,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class CNN(nn.Module):
-    def __init__(self):
+    def __init__(self, channels, use_mnist=False):
         super().__init__()
-        self.conv1 = nn.Conv2d(3, 32, kernel_size = 3, padding = 1)
+        self.channels = channels
+        self.use_mnist = use_mnist
+
+        self.conv1 = nn.Conv2d(self.channels, 32, kernel_size = 3, padding = 1)
         self.conv2 = nn.Conv2d(32, 64, kernel_size = 3, stride = 1, padding = 1)
         self.conv3 = nn.Conv2d(64, 128, kernel_size = 3, stride = 1, padding = 1)
         self.conv4 = nn.Conv2d(128, 128, kernel_size = 3, stride = 1, padding = 1)
@@ -20,6 +23,9 @@ class CNN(nn.Module):
         self.fc2 = nn.Linear(1024, 512)
         self.fc3 = nn.Linear(512, 10)
 
+        if self.use_mnist:
+            self.fc0 = nn.Linear(2304, 256 * 4 * 4)
+
     def forward(self,x):
         x = F.relu(self.conv1(x))
         x = self.pool(F.relu(self.conv2(x)))
@@ -28,6 +34,10 @@ class CNN(nn.Module):
         x = F.relu(self.conv5(x))
         x = self.pool(F.relu(self.conv6(x)))
         x = torch.flatten(x, 1)
+
+        if self.use_mnist:
+            x = F.relu(self.fc0(x))
+
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
