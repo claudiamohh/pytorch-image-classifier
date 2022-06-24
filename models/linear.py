@@ -9,7 +9,7 @@ class Linear(nn.Module):
         super().__init__()
         self.fc1 = nn.Linear(
             channels * size * size, 120
-        )  # input has to be image size to fit
+        )  # input has to be image size
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, 10)
 
