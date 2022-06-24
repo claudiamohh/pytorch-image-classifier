@@ -17,7 +17,6 @@ from datasets.mnist import MNISTDataset
 
 
 def train(model, optimizer, criterion, trainloader, epochs):
-    """Training the model using the variables: model, optimizer, criterion, trainloader, number of epochs"""
     for epoch in tqdm(range(epochs), desc="Model training"):
         running_loss = 0.0
         for batch_idx, data in enumerate(trainloader, 0):
@@ -40,7 +39,6 @@ def train(model, optimizer, criterion, trainloader, epochs):
 
 
 def evaluate_overall(model, testloader):
-    """To calculate the overall accuracy of the model"""
     correct = 0
     total = 0
 
