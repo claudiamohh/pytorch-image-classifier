@@ -67,8 +67,14 @@ To install requirements:
 $ pip install -r requirements.txt
 ```
 
-To activate environment:
+To install and activate virtual environment:
 ```
+$ python -m venv env
+
+# Linux
+source env/bin/activate
+
+# Windows
 source env/Scripts/activate
 ```
 
