@@ -53,32 +53,21 @@ class LightningCIFAR10Dataset:
 
         self.batch_size = batch_size
 
-        self.input_size = 224
+        self.input_size = 32 
 
-        self.train_transform = transforms.Compose(
-                [
-                    transforms.RandomResizedCrop(self.input_size),
-                    transforms.RandomHorizontalFlip(),
-                    transforms.ToTensor(),
-                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-                ]
+        self.transform = transforms.Compose(
+            [
+                transforms.ToTensor(),
+                transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+            ]
         )
-        
-        self.test_transform = transforms.Compose(
-                [
-                    transforms.Resize(self.input_size),
-                    transforms.CenterCrop(self.input_size),
-                    transforms.ToTensor(),
-                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-                ]
-        )
-        
+
         self.train_dataset = CIFAR10(
-                root=os.getcwd(), train=True, transform=self.train_transform, download=True
+                root=os.getcwd(), train=True, transform=self.transform, download=True
         )
 
         self.test_dataset = CIFAR10(
-                root=os.getcwd(), train=False, transform=self.test_transform, download=True
+                root=os.getcwd(), train=False, transform=self.transform, download=True
         )
 
         self.train_set_size = int(len(self.train_dataset) * 0.8)
@@ -88,6 +77,14 @@ class LightningCIFAR10Dataset:
         self.train_dataset, self.valid_dataset = random_split(
             self.train_dataset, [self.train_set_size, self.valid_set_size], generator=self.seed
         )
+    
+    def channels(self):
+        # image size = (3 * 32 * 32)
+        return 3
+
+    def size(self):
+        # image size = (3 * 32 * 32)
+        return 32
 
     def train_dataloader(self):
         return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True,)
