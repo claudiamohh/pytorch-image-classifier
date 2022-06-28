@@ -2,7 +2,7 @@
 
 A PyTorch implementation for training a large sized convolutional neural network and a linear classifier model on CIFAR-10 dataset and MNIST dataset.
 
-There are two training scripts: train.py and lightning_train.py. Pytorch lightning is used in lightning_train.py, introducing simplicity to the codes in train.py. It increases efficiency, making it reproducibility and decreases the speed. In lightning_train.py, it uses the exisiting CNN and Linear models as well as CIFAR10 and MNIST datasets. 
+There are two training scripts: train.py and lightning_train.py. Pytorch lightning is used in lightning_train.py, introducing simplicity to the codes in train.py. It increases efficiency, making it reproducibility and decreases the speed. In lightning_train.py, it uses the same models and datasets as train.py. 
 
 CIFAR-10 dataset consists of 60,000 coloured images, 50,000 images form the training data and the remaining 10,000 forming the test data. Each image has a dimension of 32 * 32 pixels. CIFAR-10 has 10 classes, each classes having 6000 images.
 
@@ -35,7 +35,7 @@ It will then half the spatial dimensions by passing through a maxpool layer over
 
 Finally, these feature maps will be flattened and passed through the fully connected layers to get an output of 10 and the accuracy.
 
-CNN() is used in train.py while LightningCNN() is used in lightning_train.py to train the CNN model with the above parameters. 
+CNN() is used in train.py while LightningCNN() is used in lightning_train.py to train the CNN Classifier model with the above parameters.
 
 2. Linear Classifier
 
@@ -49,30 +49,30 @@ self.fc3 = nn.Linear(84, 10)
 
 The Linear Classifier model consists of 3 fully connected layers. Firstly, the dataset will be flattened to 1-dimension. The first fully connected layer will then take in the flattened input and apply ReLU activation function to produce an output of 120 channels. This continues to fc3 where it has an output channel of 10.
 
-Linear() is used in train.py while LightningLinear() is used in lightning_train.py to train the Linear model with the above parameters. 
+Linear() is used in train.py while LightningLinear() is used in lightning_train.py to train the Linear Classifier model with the above parameters. 
 
 ## Training
 <ins>Pytorch</ins>
 
-The accuracy for CNN Model is:
+The accuracy for CNN Model:
 1. with CIFAR10 dataset ~79%
 2. with MNIST dataset ~99%
 
-The accuracy for Linear Model is:
+The accuracy for Linear Model:
 1. with CIFAR10 dataset ~52%
 2. with MNIST dataset ~97%
 
 <ins>Pytorch Lightning</ins>
 
-The accuracy for LightningCNN Model is:
-1. with LightningCIFAR10 dataset ~
-2. with LightningMNIST dataset ~
+The accuracy for LightningCNN Model:
+1. with LightningCIFAR10 dataset ~78%
+2. with LightningMNIST dataset ~99%
 
-The accuracy for LightningLinearModel is: 
-1. with LightningCIFAR10 dataset ~
-2. with Lightning MNIST dataset ~
+The accuracy for LightningLinearModel: 
+1. with LightningCIFAR10 dataset ~51%
+2. with Lightning MNIST dataset ~97%
 
-All models use Adam Optimizer and Cross Entropy loss to calculate the loss between input and target.
+All models use Adam Optimizer and Cross Entropy Loss to calculate the loss between input and target.
 
 ## Requirements
 1. torch
@@ -101,26 +101,38 @@ Both scripts use argsparse to write user-friendly command-line interfaces. Hence
 
 ```
 $ python train.py
+
+# with pytorch lightning
+$ python lightning_train.py
 ```
 
 By default, it trains the Linear Model with CIFAR10 dataset in train.py and LightningLinear Model with LightningCIFAR10 dataset in lightning_train.py.
 
 There are 4 variables that can be altered: learning rate, number of epoch, model and dataset. Learning rate (by default: 0.001) and epoch (by default: 10) can be changed to a user's preferred value.
 
-To use CNN model, type the following command:
+To use CNN Classifier model, type the following command:
 ```
 $ python train.py --model cnn
+
+# with pytorch lightning
+$ python lightning_train.py --model cnn
 ```
 
 To use MNIST dataset. type the following command:
 
 ```
 $ python train.py --dataset mnist
+
+# with pytorch lightning
+$ python lightning_train.py --dataset mnist
 ```
 
-Hence, to train a CNN model with MNIST dataset using 30 epochs and learning rate of 0.01 will be:
+Hence, to train a CNN Classifier model with MNIST dataset using 30 epochs and learning rate of 0.01 will be:
 
 ```
 $ python train.py --model cnn --dataset mnist --epoch 30 --lr 0.01
+
+# with pytorch lightning 
+$ python lightning_train.py --model cnn --dataset mnist --epoch 30 --lr 0.01
 ```
 
