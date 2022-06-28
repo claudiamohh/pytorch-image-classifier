@@ -47,7 +47,7 @@ class CIFAR10Dataset:
     def get_loaders(self):
         return (self.trainloader, self.testloader)
 
-#Lightning CIFAR10 Dataset
+
 class LightningCIFAR10Dataset(pl.LightningDataModule):
     def __init__(self, batch_size=256, input_size=32):
         super().__init__()
@@ -63,10 +63,10 @@ class LightningCIFAR10Dataset(pl.LightningDataModule):
 
     def setup(self, stage=None):
         self.train_dataset = CIFAR10(
-                root=os.getcwd(), train=True, transform=self.transform, download=True
+            root=os.getcwd(), train=True, transform=self.transform, download=True
         )
         self.test_dataset = CIFAR10(
-                root=os.getcwd(), train=False, transform=self.transform, download=True
+            root=os.getcwd(), train=False, transform=self.transform, download=True
         )
 
         self.train_set_size = int(len(self.train_dataset) * 0.8)
@@ -74,7 +74,9 @@ class LightningCIFAR10Dataset(pl.LightningDataModule):
 
         self.seed = torch.Generator().manual_seed(42)
         self.train_dataset, self.valid_dataset = random_split(
-            self.train_dataset, [self.train_set_size, self.valid_set_size], generator=self.seed
+            self.train_dataset,
+            [self.train_set_size, self.valid_set_size],
+            generator=self.seed,
         )
 
     def channels(self):
@@ -86,13 +88,14 @@ class LightningCIFAR10Dataset(pl.LightningDataModule):
         return 32
 
     def train_dataloader(self):
-        return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True,)
+        return DataLoader(
+            self.train_dataset,
+            batch_size=self.batch_size,
+            shuffle=True,
+        )
 
     def val_dataloader(self):
         return DataLoader(self.valid_dataset, batch_size=self.batch_size)
 
     def test_dataloader(self):
         return DataLoader(self.test_dataset, batch_size=self.batch_size)
-
-
-
