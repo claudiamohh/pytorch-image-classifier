@@ -24,18 +24,10 @@ class Linear(nn.Module):
 class LightningLinear(pl.LightningModule):
     def __init__(self, channels, size):
         super().__init__()
-        self.fc1 = nn.Linear(
-                channels * size * size, 120
-        )      #input has to be image size to fit 
-        self.fc2 = nn.Linear(120, 84)
-        self.fc3 = nn.Linear(84, 10)
+        self.model = Linear(channels, size)
 
     def forward(self,x):
-        x = torch.flatten(x, 1)
-        x = F.relu(self.fc1(x)) #activation function 
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
-        return x 
+        return self.model(x)
     
     def evaluate(self, batch, stage=None):
         x, y = batch
