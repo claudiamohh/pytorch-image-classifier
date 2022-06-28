@@ -61,7 +61,7 @@ class LightningCIFAR10Dataset(pl.LightningDataModule):
             ]
         )
 
-    def setup(self):
+    def setup(self, stage=None):
         self.train_dataset = CIFAR10(
                 root=os.getcwd(), train=True, transform=self.transform, download=True
         )
