@@ -1,15 +1,15 @@
 # Convolutional Neural Network
 
-A PyTorch implementation for training a large sized convolutional neural network and a linear classifier model on CIFAR-10 dataset and MNIST dataset.
+A PyTorch implementation for training a large sized convolutional neural network and a linear classifier model on CIFAR10 dataset and MNIST dataset.
 
-There are two training scripts: train.py and lightning_train.py. Pytorch lightning is used in lightning_train.py, introducing simplicity to the codes in train.py. It increases efficiency, making it reproducibility and decreases the speed. In lightning_train.py, it uses the same models and datasets as train.py. 
+There are two training scripts: train.py and lightning_train.py. Pytorch lightning is used in lightning_train.py, introducing simplicity to the codes in train.py. In lightning_train.py, it uses the same models and datasets as train.py. 
 
-CIFAR-10 dataset consists of 60,000 coloured images, 50,000 images form the training data and the remaining 10,000 forming the test data. Each image has a dimension of 32 * 32 pixels. CIFAR-10 has 10 classes, each classes having 6000 images.
+CIFAR10 dataset consists of 60,000 coloured images, 50,000 images form the training data and the remaining 10,000 forming the test data. Each image has a dimension of 32 * 32 pixels. CIFAR10 has 10 classes, each classes having 6000 images.
 
 MNIST dataset consists of handwritten digits between 0 and 9. It has 70,000 handwritten digits, 60,000 digits for the train set and 10,000 for the test set. Each digit is stored in a grayscale image with a size of 28 * 28 pixels.
 
 ## Model
-A large sized convolutional neural network and a linear classifier are created to train and test the accuracy of the images and digits in CIFAR-10 and MNIST dataset respectively.
+A large sized convolutional neural network and a linear classifier are created to train and test the accuracy of the images and digits in CIFAR10 and MNIST dataset respectively.
 
 1. CNN Classifier 
 ```
@@ -29,7 +29,7 @@ self.fc2 = nn.Linear(1024, 512)
 self.fc3 = nn.Linear(512, 10)
 ```
 
-The large sized CNN model consists of 6 convolution layers and 3 fully connected layers. The first convolution layer takes in the dataset's channel (CIFAR-10=3, MNIST=1) and a kernel size of 3 * 3. The output of this convolution layer is set to 32 channels, which means it will extract 32 feature maps using 32 kernels. Padding size is set to 1 so that input and output dimensions are the same. It will then go through ReLU activation followed by a max-pooling layer with kernel size of 2 and stride 2.
+The large sized CNN model consists of 6 convolution layers and 3 fully connected layers. The first convolution layer takes in the dataset's channel (CIFAR10=3, MNIST=1) and a kernel size of 3 * 3. The output of this convolution layer is set to 32 channels, which means it will extract 32 feature maps using 32 kernels. Padding size is set to 1 so that input and output dimensions are the same. It will then go through ReLU activation followed by a max-pooling layer with kernel size of 2 and stride 2.
 
 It will then half the spatial dimensions by passing through a maxpool layer over a 2 * 2 window and stride 2. The final convolution layer will produce a channeled output of 256 with the spatial dimensions now being 4 * 4.
 
@@ -74,16 +74,8 @@ The accuracy for LightningLinearModel:
 
 All models use Adam Optimizer and Cross Entropy Loss to calculate the loss between input and target.
 
-## Requirements
-1. torch
-2. torchvision
-3. tqdm
-4. pytorch-lightning 
-
-To install requirements:
-```
-$ pip install -r requirements.txt
-```
+## Getting Started
+ 
 
 To install and activate virtual environment:
 ```
@@ -94,6 +86,16 @@ source env/bin/activate
 
 # Windows
 source env/Scripts/activate
+```
+
+To install requirements:
+```
+$ pip install -r requirements.txt
+```
+
+To train the Linear model with MNIST dataset: 
+```
+$ python train.py --model linear --dataset mnist 
 ```
 
 ## Execution
