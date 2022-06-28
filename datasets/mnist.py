@@ -54,32 +54,19 @@ class LightningMNISTDataset:
 
         self.batch_size = batch_size
 
-        self.input_size = 224
-
-        self.train_transform = transforms.Compose(
-                [
-                    transforms.RandomResizedCrop(self.input_size),
-                    transforms.RandomHorizontalFlip(),
-                    transforms.ToTensor(),
-                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-                ]
-        )
+        self.input_size = 28
         
-        self.test_transform = transforms.Compose(
-                [
-                    transforms.Resize(self.input_size),
-                    transforms.CenterCrop(self.input_size),
-                    transforms.ToTensor(),
-                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-                ]
+
+        self.transform = transforms.Compose(
+            [transforms.ToTensor(), transforms.Normalize((0.5), (0.5))]
         )
         
         self.train_dataset = MNIST(
-                root=os.getcwd(), train=True, transform=self.train_transform, download=True
+                root=os.getcwd(), train=True, transform=self.transform, download=True
         )
 
         self.test_dataset = MNIST(
-                root=os.getcwd(), train=False, transform=self.test_transform, download=True
+                root=os.getcwd(), train=False, transform=self.transform, download=True
         )
 
         self.train_set_size = int(len(self.train_dataset) * 0.8)
@@ -89,6 +76,14 @@ class LightningMNISTDataset:
         self.train_dataset, self.valid_dataset = random_split(
             self.train_dataset, [self.train_set_size, self.valid_set_size], generator=self.seed
         )
+    
+    def channels(self):
+        # image size = (1 * 28 * 28)
+        return 1
+
+    def size(self):
+        # image size = (1 * 28 * 28)
+        return 28
 
     def train_dataloader(self):
         return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True,)
