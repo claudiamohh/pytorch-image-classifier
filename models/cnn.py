@@ -79,7 +79,7 @@ class LightningCNN(pl.LightningModule):
             self.log(f"{stage}_loss", loss, prog_bar=True)
             self.log(f"{stage}_acc", acc, prog_bar=True)
             self.log(f"{stage}_f1", f1, prog_bar=True)
-        
+
     def training_step(self, batch, batch_idx):
         x, y = batch
         logits = self.forward(x)
@@ -89,14 +89,14 @@ class LightningCNN(pl.LightningModule):
 
     def validation_step(self, batch, batch_idx):
         self.evaluate(batch, "valid")
-    
+
     def test_step(self, batch, batch_idx):
         self.evaluate(batch, "test")
 
     def predict_step(self, batch, batch_idx):
         x, y = batch
         logits = self.forward(x)
-        return logits 
+        return logits
 
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=self.lr)
