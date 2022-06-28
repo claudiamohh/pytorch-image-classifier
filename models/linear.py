@@ -40,7 +40,7 @@ class LightningLinear(pl.LightningModule):
         f1 = f1_score(preds, y, num_classes=10)
 
         if stage:
-            self.log(f"{stage}_loss", loss, prog_bar=True) # show metrics in progress bar
+            self.log(f"{stage}_loss", loss, prog_bar=True)
             self.log(f"{stage}_acc", acc, prog_bar=True)
             self.log(f"{stage}_f1", f1, prog_bar=True)
         
