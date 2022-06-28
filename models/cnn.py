@@ -1,9 +1,9 @@
 import torch
-import torchvision
 import torch.nn as nn
 import torch.nn.functional as F
-import torchvision.models as models
 import pytorch_lightning as pl
+from torchmetrics.functional import accuracy, f1_score
+
 
 class CNN(nn.Module):
     """Large CNN Model with 6 convolution layers, pooling layers and 3 fully
@@ -54,42 +54,17 @@ class CNN(nn.Module):
 
 
 class LightningCNN(pl.LightningModule):
-    def __init__(self, channels, use_mnist=False):
+    def __init__(self, channels, lr, use_mnist=False):
         super().__init__()
         self.channels = channels
+        self.lr = lr
         self.use_mnist = use_mnist
 
-        self.conv1 = nn.Conv2d(self.channels, 32, kernel_size = 3, padding = 1)
-        self.conv2 = nn.Conv2d(32, 64, kernel_size = 3, stride = 1, padding = 1)
-        self.conv3 = nn.Conv2d(64, 128, kernel_size = 3, stride = 1, padding = 1)
-        self.conv4 = nn.Conv2d(128, 128, kernel_size = 3, stride = 1, padding = 1)
-        self.conv5 = nn.Conv2d(128, 256, kernel_size = 3, stride = 1, padding = 1)
-        self.conv6 = nn.Conv2d(256, 256, kernel_size = 3, stride = 1, padding = 1)
-        self.pool = nn.MaxPool2d(2, 2)
+        self.model = CNN(self.channels, self.use_mnist)
 
-        if self.use_mnist:
-            self.fc0 = nn.Linear(2304, 256 * 4 * 4)
+    def forward(self, x):
+        return self.model(x)
 
-        self.fc1 = nn.Linear(256 * 4 * 4, 1024)
-        self.fc2 = nn.Linear(1024, 512)
-        self.fc3 = nn.Linear(512, 10)
-
-    def forward(self,x):
-        x = F.relu(self.conv1(x))
-        x = self.pool(F.relu(self.conv2(x)))
-        x = F.relu(self.conv3(x))
-        x = self.pool(F.relu(self.conv4(x)))
-        x = F.relu(self.conv5(x))
-        x = self.pool(F.relu(self.conv6(x)))
-        x = torch.flatten(x, 1)
-
-        if self.use_mnist:
-            x = F.relu(self.fc0(x))
-
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
-        return x
     def evaluate(self, batch, stage=None):
         x, y = batch
         logits = self.forward(x)
@@ -101,7 +76,7 @@ class LightningCNN(pl.LightningModule):
         f1 = f1_score(preds, y, num_classes=10)
 
         if stage:
-            self.log(f"{stage}_loss", loss, prog_bar=True) # show metrics in progress bar
+            self.log(f"{stage}_loss", loss, prog_bar=True)
             self.log(f"{stage}_acc", acc, prog_bar=True)
             self.log(f"{stage}_f1", f1, prog_bar=True)
         
@@ -123,6 +98,5 @@ class LightningCNN(pl.LightningModule):
         logits = self.forward(x)
         return logits 
 
-    def configure_optimizers(self, lr):
-        self.lr = lr
+    def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=self.lr)
