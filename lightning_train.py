@@ -44,7 +44,7 @@ def main(args):
 
     trainer = pl.Trainer(
         accelerator=accelerator,
-        devices=gpu_counts,
+        devices=None if accelerator=="cpu" else gpu_counts,
         max_epochs=args.epoch,
         callbacks=[early_stop_callback],
         # logger=TensorBoardLogger("claudia_lightning_logs/", name="claudia_lightning_model")
