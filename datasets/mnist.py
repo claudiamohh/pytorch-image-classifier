@@ -1,12 +1,12 @@
 """ MNIST Dataset """
 import os
 import torch
-import torchvision
+import pytorch_lightning as pl
 import torchvision.transforms as transforms
 from torchvision import datasets
-from torchvision.datasets import MNIST      
-from torchvision.transforms import ToTensor
+from torchvision.datasets import MNIST
 from torch.utils.data import DataLoader, random_split
+
 
 class MNISTDataset:
     def __init__(self, batch_size=256):
@@ -46,27 +46,22 @@ class MNISTDataset:
         return (self.trainloader, self.testloader)
 
 
-#Lightning MNIST Dataset
-
-class LightningMNISTDataset:
-    def __init__(self, batch_size=256):
+class LightningMNISTDataset(pl.LightningDataModule):
+    def __init__(self, batch_size=256, input_size=28):
         super().__init__()
 
         self.batch_size = batch_size
-
-        self.input_size = 28
-        
-
+        self.input_size = input_size
         self.transform = transforms.Compose(
             [transforms.ToTensor(), transforms.Normalize((0.5), (0.5))]
         )
-        
-        self.train_dataset = MNIST(
-                root=os.getcwd(), train=True, transform=self.transform, download=True
-        )
 
+    def setup(self, stage=None):
+        self.train_dataset = MNIST(
+            root="data", train=True, transform=self.transform, download=True
+        )
         self.test_dataset = MNIST(
-                root=os.getcwd(), train=False, transform=self.transform, download=True
+            root="data", train=False, transform=self.transform, download=True
         )
 
         self.train_set_size = int(len(self.train_dataset) * 0.8)
@@ -74,9 +69,11 @@ class LightningMNISTDataset:
 
         self.seed = torch.Generator().manual_seed(42)
         self.train_dataset, self.valid_dataset = random_split(
-            self.train_dataset, [self.train_set_size, self.valid_set_size], generator=self.seed
+            self.train_dataset,
+            [self.train_set_size, self.valid_set_size],
+            generator=self.seed,
         )
-    
+
     def channels(self):
         # image size = (1 * 28 * 28)
         return 1
@@ -86,9 +83,13 @@ class LightningMNISTDataset:
         return 28
 
     def train_dataloader(self):
-        return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True,)
+        return DataLoader(
+            self.train_dataset,
+            batch_size=self.batch_size,
+            shuffle=True,
+        )
 
-    def valid_dataloader(self):
+    def val_dataloader(self):
         return DataLoader(self.valid_dataset, batch_size=self.batch_size)
 
     def test_dataloader(self):
