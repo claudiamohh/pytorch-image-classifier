@@ -71,4 +71,5 @@ class LightningLinear(pl.LightningModule):
         return logits 
 
     def configure_optimizers(self, lr):
-        return torch.optim.Adam(self.parameters(), lr=lr)
+        self.lr = lr
+        return torch.optim.Adam(self.parameters(), lr=self.lr)
