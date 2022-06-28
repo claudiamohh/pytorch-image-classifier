@@ -1,12 +1,12 @@
 """ MNIST Dataset """
 import os
 import torch
-import torchvision
+import pytorch_lightning as pl
 import torchvision.transforms as transforms
 from torchvision import datasets
-from torchvision.datasets import MNIST      
-from torchvision.transforms import ToTensor
+from torchvision.datasets import MNIST
 from torch.utils.data import DataLoader, random_split
+
 
 class MNISTDataset:
     def __init__(self, batch_size=256):
@@ -46,25 +46,20 @@ class MNISTDataset:
         return (self.trainloader, self.testloader)
 
 
-#Lightning MNIST Dataset
-
-class LightningMNISTDataset:
-    def __init__(self, batch_size=256):
+class LightningMNISTDataset(pl.LightningDataModule):
+    def __init__(self, batch_size=256, input_size=28):
         super().__init__()
 
         self.batch_size = batch_size
-
-        self.input_size = 28
-        
-
+        self.input_size = input_size
         self.transform = transforms.Compose(
             [transforms.ToTensor(), transforms.Normalize((0.5), (0.5))]
         )
         
+    def setup(self, stage=None):
         self.train_dataset = MNIST(
                 root=os.getcwd(), train=True, transform=self.transform, download=True
         )
-
         self.test_dataset = MNIST(
                 root=os.getcwd(), train=False, transform=self.transform, download=True
         )
@@ -88,7 +83,7 @@ class LightningMNISTDataset:
     def train_dataloader(self):
         return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True,)
 
-    def valid_dataloader(self):
+    def val_dataloader(self):
         return DataLoader(self.valid_dataset, batch_size=self.batch_size)
 
     def test_dataloader(self):
