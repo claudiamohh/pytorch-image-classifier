@@ -48,13 +48,11 @@ class CIFAR10Dataset:
 
 #Lightning CIFAR10 Dataset
 class LightningCIFAR10Dataset:
-    def __init__(self, batch_size=256):
+    def __init__(self, batch_size=256, input_size=32):
         super().__init__()
 
         self.batch_size = batch_size
-
-        self.input_size = 32 
-
+        self.input_size = input_size
         self.transform = transforms.Compose(
             [
                 transforms.ToTensor(),
@@ -62,10 +60,10 @@ class LightningCIFAR10Dataset:
             ]
         )
 
+    def setup(self):
         self.train_dataset = CIFAR10(
                 root=os.getcwd(), train=True, transform=self.transform, download=True
         )
-
         self.test_dataset = CIFAR10(
                 root=os.getcwd(), train=False, transform=self.transform, download=True
         )
@@ -77,7 +75,7 @@ class LightningCIFAR10Dataset:
         self.train_dataset, self.valid_dataset = random_split(
             self.train_dataset, [self.train_set_size, self.valid_set_size], generator=self.seed
         )
-    
+
     def channels(self):
         # image size = (3 * 32 * 32)
         return 3
@@ -89,8 +87,11 @@ class LightningCIFAR10Dataset:
     def train_dataloader(self):
         return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True,)
 
-    def valid_dataloader(self):
+    def val_dataloader(self):
         return DataLoader(self.valid_dataset, batch_size=self.batch_size)
 
     def test_dataloader(self):
         return DataLoader(self.test_dataset, batch_size=self.batch_size)
+
+
+
