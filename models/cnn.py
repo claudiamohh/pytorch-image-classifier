@@ -54,7 +54,7 @@ class CNN(nn.Module):
 
 
 class LightningCNN(pl.LightningModule):
-    def __init__(self, channles, use_mnist=False):
+    def __init__(self, channels, use_mnist=False):
         super().__init__()
         self.channels = channels
         self.use_mnist = use_mnist
@@ -124,4 +124,5 @@ class LightningCNN(pl.LightningModule):
         return logits 
 
     def configure_optimizers(self, lr):
-        return torch.optim.Adam(self.parameters(), lr=lr)
+        self.lr = lr
+        return torch.optim.Adam(self.parameters(), lr=self.lr)
