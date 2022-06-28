@@ -1,4 +1,5 @@
 import os
+import pytorch_lightning as pl
 import torch
 import torchvision
 import torchvision.transforms as transforms
@@ -47,7 +48,7 @@ class CIFAR10Dataset:
         return (self.trainloader, self.testloader)
 
 #Lightning CIFAR10 Dataset
-class LightningCIFAR10Dataset:
+class LightningCIFAR10Dataset(pl.LightningDataModule):
     def __init__(self, batch_size=256, input_size=32):
         super().__init__()
 
