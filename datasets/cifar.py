@@ -63,10 +63,10 @@ class LightningCIFAR10Dataset(pl.LightningDataModule):
 
     def setup(self, stage=None):
         self.train_dataset = CIFAR10(
-            root=os.getcwd(), train=True, transform=self.transform, download=True
+            root="./data", train=True, transform=self.transform, download=True
         )
         self.test_dataset = CIFAR10(
-            root=os.getcwd(), train=False, transform=self.transform, download=True
+            root="./data", train=False, transform=self.transform, download=True
         )
 
         self.train_set_size = int(len(self.train_dataset) * 0.8)
