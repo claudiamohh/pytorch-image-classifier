@@ -58,8 +58,8 @@ if __name__ == "__main__":
     )
     parser.add_argument("--lr", default=0.001, type=float, help="Learning rate")
     parser.add_argument("--epoch", default=10, type=int, help="Number of epoch")
-    parser.add_argument("--model")
-    parser.add_argument("--dataset")
+    parser.add_argument("--model", default="linear", help="Type of model to be trained")
+    parser.add_argument("--dataset", default="cifar10", help="Dataset to be used" )
     args = parser.parse_args()
 
     main(args)
