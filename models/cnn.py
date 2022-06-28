@@ -123,5 +123,5 @@ class LightningCNN(pl.LightningModule):
         logits = self.forward(x)
         return logits 
 
-    def configure_optimizers(self):
-        return torch.optim.Adam(self.parameters(), lr=args.lr)
+    def configure_optimizers(self, lr):
+        return torch.optim.Adam(self.parameters(), lr=lr)
