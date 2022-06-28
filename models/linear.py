@@ -22,9 +22,10 @@ class Linear(nn.Module):
         return x
 
 class LightningLinear(pl.LightningModule):
-    def __init__(self, channels, size):
+    def __init__(self, channels, size, lr):
         super().__init__()
         self.model = Linear(channels, size)
+        self.lr = lr
 
     def forward(self,x):
         return self.model(x)
@@ -62,6 +63,5 @@ class LightningLinear(pl.LightningModule):
         logits = self.forward(x)
         return logits 
 
-    def configure_optimizers(self, lr):
-        self.lr = lr
+    def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=self.lr)
