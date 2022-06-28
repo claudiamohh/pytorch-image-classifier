@@ -55,13 +55,13 @@ class LightningMNISTDataset(pl.LightningDataModule):
         self.transform = transforms.Compose(
             [transforms.ToTensor(), transforms.Normalize((0.5), (0.5))]
         )
-        
+
     def setup(self, stage=None):
         self.train_dataset = MNIST(
-                root=os.getcwd(), train=True, transform=self.transform, download=True
+            root=os.getcwd(), train=True, transform=self.transform, download=True
         )
         self.test_dataset = MNIST(
-                root=os.getcwd(), train=False, transform=self.transform, download=True
+            root=os.getcwd(), train=False, transform=self.transform, download=True
         )
 
         self.train_set_size = int(len(self.train_dataset) * 0.8)
@@ -69,9 +69,11 @@ class LightningMNISTDataset(pl.LightningDataModule):
 
         self.seed = torch.Generator().manual_seed(42)
         self.train_dataset, self.valid_dataset = random_split(
-            self.train_dataset, [self.train_set_size, self.valid_set_size], generator=self.seed
+            self.train_dataset,
+            [self.train_set_size, self.valid_set_size],
+            generator=self.seed,
         )
-    
+
     def channels(self):
         # image size = (1 * 28 * 28)
         return 1
@@ -81,7 +83,11 @@ class LightningMNISTDataset(pl.LightningDataModule):
         return 28
 
     def train_dataloader(self):
-        return DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=True,)
+        return DataLoader(
+            self.train_dataset,
+            batch_size=self.batch_size,
+            shuffle=True,
+        )
 
     def val_dataloader(self):
         return DataLoader(self.valid_dataset, batch_size=self.batch_size)
